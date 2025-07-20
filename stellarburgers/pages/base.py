@@ -74,3 +74,6 @@ class BasePage:
     @allure.step("Ожидание появление элемента")
     def wait_element_in_visible(self, path):
         self.__wait.until(EC.visibility_of_element_located(path))
+
+    def wait_change_class(self, section, element):
+        self.__wait.until(lambda d: section in element.get_attribute('class'))

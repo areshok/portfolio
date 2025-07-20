@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from .data.data import generate_user, hash_ingridient
 from .data.urls import URLS
 from .pages.user_page import UserPage
-from .data.data import USER
+from .data.data import USER, get_browser
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -23,25 +23,26 @@ if str(ROOT_DIR) not in sys.path:
     "firefox"
     ])
 def browser(request):
-    with allure.step(f"Открытие браузера {request.param}"):
-        if request.param == "chrome":
-            options = Options()
-            options.add_argument("--disable-cache")
-            options.add_argument("--incognito")
-            browser = webdriver.Chrome(options=options)
-        elif request.param == "firefox":
-            options = webdriver.FirefoxOptions()
-            options.add_argument("--private")
-            browser = webdriver.Firefox(
-                options=options
-                )
-        browser.get(URLS["ui"]["/"])
-        yield browser
-        browser.quit()
+    browser = get_browser(request.param)
+    browser.get(URLS["ui"]["/"])
+    yield browser
+    browser.quit()
+
+
+@pytest.fixture(params=[
+    "chrome",
+    "firefox"
+    ],
+    scope="class")
+def browser_cls(request):
+    browser = get_browser(request.param)
+    browser.get(URLS["ui"]["/"])
+    yield browser
+    browser.quit()
 
 
 @pytest.fixture()
-def login(browser):
+def auth_browser(browser):
     user = UserPage(browser)
     user.login(**USER)
     return browser

@@ -2,8 +2,10 @@ import random
 import string
 
 import allure
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
-from ..settings import LENGHT_GENERATE
+from .settings import LENGHT_GENERATE
 
 
 USER = {"login": "ars@ars.ru", "password": "123456"}
@@ -34,3 +36,18 @@ def generate_user(length=LENGHT_GENERATE):
         "password": password,
         "name": name
     }
+
+@allure.step("Октрытие браузера {name_browser}")
+def get_browser(name_browser):
+    if name_browser == "chrome":
+        options = Options()
+        options.add_argument("--disable-cache")
+        options.add_argument("--incognito")
+        browser = webdriver.Chrome(options=options)
+    elif name_browser == "firefox":
+        options = webdriver.FirefoxOptions()
+        options.add_argument("--private")
+        browser = webdriver.Firefox(
+            options=options
+                )
+    return browser

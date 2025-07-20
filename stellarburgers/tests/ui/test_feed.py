@@ -18,7 +18,7 @@ class TestCaseFeed:
     )
     def test_after_create_order_feed_page(
             self,
-            login):
+            auth_browser):
         """
         тест: при создании нового заказа счётчик
         «Выполнено за всё время» увеличивается
@@ -26,9 +26,8 @@ class TestCaseFeed:
         «Выполнено за сегодня» увеличивается
         тест: после оформления заказа его номер появляется в разделе «В работе
         """
-        driver = login
-        feed = FeedPage(driver)
-        constructor = ConstructorPage(driver)
+        feed = FeedPage(auth_browser)
+        constructor = ConstructorPage(auth_browser)
         feed.open_url(URLS["ui"]["/"])
         feed.open_url(URLS["ui"]["feed"])
         in_day = feed.get_complited_in_day()

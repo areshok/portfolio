@@ -21,3 +21,14 @@ class UserPage(BasePage):
     @allure.step("Проверка что пользователь вошел на сайт")
     def check_login_user(self):
         self.get_element(Designer.order)
+
+    @allure.step("Регистрация пользователя")
+    def registration(self, data):
+        name = self.get_element(UserLocator.RegistrationPage.name)
+        email = self.get_element(UserLocator.RegistrationPage.email)
+        password = self.get_element(UserLocator.RegistrationPage.password)
+        self.write_field(name, data["name"])
+        self.write_field(email, data["email"])
+        self.write_field(password, data["password"])
+        button = self.get_element(UserLocator.RegistrationPage.register)
+        self.click_element(button)

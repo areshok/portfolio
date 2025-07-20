@@ -33,7 +33,7 @@ class ConstructorPage(BasePage):
         self.click(Detail.button)
 
     @allure.step("Получение class элемента section окна 'О ингридиенте'")
-    def class_detail_window(self):
+    def class_detail_window(self) -> str:
         element = self.get_element(Detail.parent_window)
         return element.get_attribute("class")
 
